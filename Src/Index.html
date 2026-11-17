@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roaring Knight</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main class="centerpiece">
+    <h1>The roaring knight</h1>
+    <section class="announcement-feed" id="announcement-feed" aria-labelledby="announcements-title" hidden>
+      <h2 id="announcements-title">Announcements</h2>
+      <ol class="announcement-list" id="announcement-list"></ol>
+    </section>
+    <a class="goat-statue-link" href="https://websim.com/@kris_is_gaster" aria-label="Visit Kris's profile">
+      <figure class="goat-statue">
+        <div class="statue-bust"><img src="https://images.websim.com/avatar/kris_is_gaster" alt=""></div>
+        <figcaption class="statue-plaque">THE GOAT</figcaption>
+      </figure>
+    </a>
+    <button class="tv-set" id="tv-set" type="button" aria-label="Click the TV to turn it on">
+      <span class="tv-screen"><img id="tv-image" src="Tenna_battle.gif" alt="" hidden></span>
+      <span class="tv-controls" aria-hidden="true"><i></i><i></i><b></b></span>
+    </button>
+    <div class="knight-line">
+      <button class="knight" id="knight" type="button" aria-label="Click The roaring knight">
+        <img src="Roaring_Knight_Idle.webp" alt="The roaring knight">
+      </button>
+      <button class="kaizo-companion" id="kaizo-companion" type="button" aria-label="Click Kaizo Knight" hidden><img src="static-assets-upload14633654429706285761.webp" alt=""></button>
+    </div>
+    <p class="counter" aria-live="polite"><span id="hits">0</span> hits</p>
+    <button class="vessel-open" id="vessel-open" type="button">Vessel</button>
+    <p class="freeze-status" id="freeze-status" aria-live="off" hidden></p>
+    <a class="play-kris-button" href="https://websim.com/@kris_is_gaster/hitkris" aria-label="play hit kris!"><img src="noFilter%20(16).webp" alt=""><span>play hit kris!</span></a>
+    <button class="sandbox-mode-button" type="button" aria-label="Sandbox mode"><img src="noFilter%20(16).webp" alt=""><span>Sandbox mode</span></button>
+    <button class="chat-toggle" id="chat-toggle" type="button" aria-expanded="false" aria-controls="chat-panel">Global chat</button>
+    <section class="chat-panel" id="chat-panel" aria-labelledby="chat-title" hidden>
+      <header class="chat-header">
+        <h2 id="chat-title">Global chat</h2>
+        <span class="chat-status" id="chat-status">Open to connect</span>
+      </header>
+      <ol class="chat-messages" id="chat-messages" aria-live="polite" aria-relevant="additions"></ol>
+      <form class="chat-form" id="chat-form">
+        <input class="chat-input" id="chat-input" type="text" maxlength="200" aria-label="Chat message" placeholder="Write a message…" autocomplete="off" disabled>
+        <button class="chat-send" id="chat-send" type="submit" disabled>Send</button>
+      </form>
+    </section>
+    <button class="leaderboard-toggle" id="leaderboard-toggle" type="button" aria-expanded="false" aria-controls="leaderboard-panel">Leaderboard</button>
+    <section class="leaderboard-panel" id="leaderboard-panel" aria-labelledby="leaderboard-title" hidden>
+      <h2 id="leaderboard-title">Top hits</h2>
+      <ol class="leaderboard-list" id="leaderboard-list"></ol>
+      <p class="leaderboard-status" id="leaderboard-status" aria-live="polite">Loading…</p>
+    </section>
+    <button class="achievements-toggle" id="achievements-toggle" type="button" aria-expanded="false" aria-controls="achievements-panel">Achievements</button>
+    <section class="achievements-panel" id="achievements-panel" aria-labelledby="achievements-title" hidden>
+      <h2 id="achievements-title">Achievements</h2>
+      <div class="achievement-list" id="achievement-list"></div>
+    </section>
+    <button class="backgrounds-toggle" id="backgrounds-toggle" type="button" aria-expanded="false" aria-controls="backgrounds-panel">Backgrounds</button>
+    <section class="backgrounds-panel" id="backgrounds-panel" aria-labelledby="backgrounds-title" hidden>
+      <h2 id="backgrounds-title">Backgrounds</h2>
+      <div class="background-list" id="background-list"></div>
+    </section>
+    <button class="shop-toggle" id="shop-toggle" type="button" aria-expanded="false" aria-controls="shop" hidden>Shop</button>
+    <section class="shop" id="shop" aria-labelledby="shop-title" hidden>
+      <h2 id="shop-title">Shop</h2>
+      <div class="shop-item">
+        <div><h3>Honed blade</h3><p>+1 hit per click</p></div>
+        <button class="buy-button" data-item="honed" type="button">Buy · 50 hits</button>
+      </div>
+      <div class="shop-item">
+        <div><h3>Roaring strike</h3><p>+5 hits per click</p></div>
+        <button class="buy-button" data-item="strike" type="button">Buy · 200 hits</button>
+      </div>
+      <div class="shop-item kaizo-item">
+        <img src="static-assets-upload14633654429706285761.webp" alt="">
+        <div class="item-copy"><h3>Kaizo Knight</h3><p>Triples hits per click</p></div>
+        <button class="buy-button" data-item="kaizo" type="button">Buy · 1225 hits</button>
+      </div>
+      <div class="shop-item kaizo-item kris-item" id="kris-shop-item" hidden>
+        <img src="https://images.websim.com/avatar/kris_is_gaster" alt="@kris_is_gaster">
+        <div class="item-copy"><h3>@kris_is_gaster</h3><p>+75,000,000 hits per click when equipped</p></div>
+        <button class="buy-button" data-item="kris" type="button">Claim</button>
+      </div>
+    </section>
+    <button class="admin-toggle" id="admin-toggle" type="button" aria-expanded="false" aria-controls="admin-panel" hidden>Admin</button>
+    <section class="admin-panel" id="admin-panel" aria-labelledby="admin-title" hidden>
+      <h2 id="admin-title">Admin panel</h2>
+      <form class="announcement-compose" id="announcement-form">
+        <label for="announcement-input">Post an announcement</label>
+        <textarea id="announcement-input" maxlength="280" rows="3" required placeholder="Write an announcement…"></textarea>
+        <button class="buy-button" id="announcement-submit" type="submit">Publish announcement</button>
+        <p class="announcement-status" id="announcement-status" aria-live="polite"></p>
+      </form>
+      <div class="admin-stats" aria-label="Local game statistics">
+        <div><span>Current hits</span><strong id="admin-current-hits">0</strong></div>
+        <div><span>Backgrounds</span><strong id="admin-background-count">1 / 4</strong></div>
+        <div><span>Upgrades</span><strong id="admin-upgrade-count">0 / 3</strong></div>
+      </div>
+      <form id="grant-form">
+        <label for="grant-amount">Grant hits</label>
+        <div class="grant-controls">
+          <input id="grant-amount" name="amount" type="number" min="1" max="1000000000" step="1" required placeholder="Amount">
+          <button class="buy-button" type="submit">Add</button>
+        </div>
+      </form>
+      <form id="set-hits-form">
+        <label for="set-hits-amount">Set hit total</label>
+        <div class="grant-controls">
+          <input id="set-hits-amount" name="amount" type="number" min="0" max="1000000000" step="1" required placeholder="New total">
+          <button class="buy-button" type="submit">Set</button>
+        </div>
+      </form>
+      <div class="admin-actions">
+        <button class="buy-button" id="unlock-upgrades" type="button">Unlock all upgrades</button>
+        <button class="buy-button" id="unlock-backgrounds" type="button">Unlock all backgrounds</button>
+      </div>
+      <p class="admin-status" id="admin-status" aria-live="polite"></p>
+    </section>
+  </main>
+  <section class="achievement-scene" id="achievement-scene" aria-live="polite" hidden>
+    <div class="scene-swoon" id="scene-swoon" hidden><img src="Assets/Sprites/Swoon.jpg" alt="A white swoosh on black"></div>
+    <div class="scene-aqua" id="scene-aqua" hidden>
+      <img id="scene-aqua-sprite" src="Assets/Sprites/AquaIdle.webp" alt="Aqua">
+      <p>uuu i want to swoon too!</p>
+    </div>
+    <div class="scene-blue-swoon" id="scene-blue-swoon" hidden><img src="Assets/Sprites/Swoon.jpg" alt="A blue-tinted swoosh"></div>
+    <div class="scene-flowery" id="scene-flowery" hidden><img src="Assets/Sprites/Flowery.webp" alt="Flowery"></div>
+    <div class="scene-flowery-death" id="scene-flowery-death" hidden>
+      <img src="Assets/Sprites/Swoon.jpg" alt="A swoosh fills the screen">
+      <p>FLOWERY DIED</p>
+    </div>
+    <div class="scene-kaizo-death" id="scene-kaizo-death" hidden>
+      <img class="kaizo-death-swoon" src="Assets/Sprites/Swoon.jpg" alt="A swoosh fills the screen">
+      <img class="kaizo-death-sprite" src="static-assets-upload14633654429706285761.webp" alt="Kaizo Knight fading away">
+    </div>
+    <div class="scene-roaring" id="scene-roaring" hidden>
+      <img class="roaring-knight-open" src="Roaring_Knight_Idle.webp" alt="The roaring knight">
+      <img class="dark-fountain" id="dark-fountain" src="Assets/Sprites/DarkFountainFrames/frame-01.png" alt="The dark fountain opening">
+    </div>
+    <div class="scene-jarona-ripped" id="scene-jarona-ripped" hidden>
+      <img src="Assets/Sprites/Jarona_Retry.png" alt="A golden flower torn in half behind shattered glass">
+    </div>
+  </section>
+  <section class="victory-screen" id="victory-screen" role="dialog" aria-modal="true" aria-labelledby="victory-title" hidden>
+    <img class="victory-knight" src="deltarune-knight%20(1).gif" alt="The knight flying across the screen">
+    <div class="victory-message">
+      <h2 id="victory-title">Congratulations!</h2>
+      <p>You beat the game!</p>
+      <button class="victory-close" id="victory-close" type="button">Close</button>
+    </div>
+  </section>
+  <section class="intro-screen" id="intro-screen" role="dialog" aria-modal="true" aria-labelledby="intro-dialogue">
+    <div class="intro-card">
+      <img class="intro-avatar" src="images%20(5).jpeg" alt="heitorm20003's profile picture">
+      <p class="intro-dialogue" id="intro-dialogue" aria-live="polite">umm hello!</p>
+      <button class="intro-next" id="intro-next" type="button">Next</button>
+    </div>
+  </section>
+  <section class="vessel-screen" id="vessel-screen" role="dialog" aria-modal="true" aria-labelledby="vessel-title" hidden>
+    <div class="vessel-card">
+      <h2 id="vessel-title">Create your vessel</h2>
+      <div class="vessel-preview" aria-label="Your vessel preview">
+        <img class="vessel-water" src="is-it-just-me-or-does-the-vessel-creation-void-seem-very-v0-xq43dszcfpmc1.webp" alt="">
+        <img class="vessel-part vessel-legs" id="vessel-preview-legs" alt="">
+        <img class="vessel-part vessel-body" id="vessel-preview-body" alt="">
+        <img class="vessel-part vessel-head" id="vessel-preview-head" alt="">
+      </div>
+      <div class="vessel-choices" id="vessel-choices"></div>
+      <label class="vessel-name-label" for="vessel-name">Name</label>
+      <input class="vessel-name" id="vessel-name" maxlength="24" autocomplete="off" placeholder="Your vessel's name" required>
+      <button class="vessel-create" id="vessel-create" type="button">Create vessel</button>
+    </div>
+  </section>
+</body>
+</html>
