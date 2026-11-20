@@ -24,13 +24,27 @@
       <span class="tv-screen"><img id="tv-image" src="Tenna_battle.gif" alt="" hidden></span>
       <span class="tv-controls" aria-hidden="true"><i></i><i></i><b></b></span>
     </button>
-    <div class="knight-line">
-      <button class="knight" id="knight" type="button" aria-label="Click The roaring knight">
-        <img src="Roaring_Knight_Idle.webp" alt="The roaring knight">
+    <div class="game-stage">
+      <button class="streetlight" id="streetlight" type="button" aria-label="Click the streetlight">
+        <span class="streetlight-glow" aria-hidden="true"></span>
+        <span class="streetlight-arm" aria-hidden="true"></span>
+        <span class="streetlight-head" aria-hidden="true"></span>
+        <span class="streetlight-pole" aria-hidden="true"></span>
+        <span class="streetlight-base" aria-hidden="true"></span>
       </button>
-      <button class="kaizo-companion" id="kaizo-companion" type="button" aria-label="Click Kaizo Knight" hidden><img src="static-assets-upload14633654429706285761.webp" alt=""></button>
+      <div class="knight-line">
+        <button class="knight" id="knight" type="button" aria-label="Click The roaring knight">
+          <img src="Roaring_Knight_Idle.webp" alt="The roaring knight">
+        </button>
+        <button class="kaizo-companion" id="kaizo-companion" type="button" aria-label="Click Kaizo Knight" hidden><img src="static-assets-upload14633654429706285761.webp" alt=""></button>
+      </div>
     </div>
-    <p class="counter" aria-live="polite"><span id="hits">0</span> hits</p>
+    <p class="counter" aria-live="polite"><span id="hits">0</span> hits <span class="currency-separator">·</span> <span class="dark-dollar-total"><span id="dark-dollars">0</span> Dark Dollars</span></p>
+    <div class="gifted-sword" id="sad-sword-gift" hidden>
+      <img src="IMG_9092.jpeg" alt="">
+      <span>Sad Tumore Sword · +900 hits/click</span>
+      <button class="buy-button" id="sad-sword-toggle" type="button">Equip</button>
+    </div>
     <button class="vessel-open" id="vessel-open" type="button">Vessel</button>
     <p class="freeze-status" id="freeze-status" aria-live="off" hidden></p>
     <a class="play-kris-button" href="https://websim.com/@kris_is_gaster/hitkris" aria-label="play hit kris!"><img src="noFilter%20(16).webp" alt=""><span>play hit kris!</span></a>
@@ -52,6 +66,9 @@
       <h2 id="leaderboard-title">Top hits</h2>
       <ol class="leaderboard-list" id="leaderboard-list"></ol>
       <p class="leaderboard-status" id="leaderboard-status" aria-live="polite">Loading…</p>
+      <h2 class="admin-leaderboard-title">Admin leaderboard</h2>
+      <ol class="leaderboard-list" id="admin-leaderboard-list"></ol>
+      <p class="leaderboard-status" id="admin-leaderboard-status" aria-live="polite">Loading…</p>
     </section>
     <button class="achievements-toggle" id="achievements-toggle" type="button" aria-expanded="false" aria-controls="achievements-panel">Achievements</button>
     <section class="achievements-panel" id="achievements-panel" aria-labelledby="achievements-title" hidden>
@@ -63,21 +80,39 @@
       <h2 id="backgrounds-title">Backgrounds</h2>
       <div class="background-list" id="background-list"></div>
     </section>
+    <button class="socials-toggle" id="socials-toggle" type="button" aria-expanded="false" aria-controls="socials-panel">Socials</button>
+    <section class="socials-panel" id="socials-panel" aria-labelledby="socials-title" hidden>
+      <h2 id="socials-title">Socials</h2>
+      <a href="https://github.com/Hector-scripter/Hit-The-Roaring-Knight" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </section>
+    <button class="credits-toggle" id="credits-toggle" type="button" aria-expanded="false" aria-controls="credits-panel">Credits</button>
+    <section class="credits-panel" id="credits-panel" aria-labelledby="credits-title" hidden>
+      <h2 id="credits-title">Credits</h2>
+      <dl class="credits-list">
+        <div><dt>Creator</dt><dd><a href="https://websim.com/@Heitorm2003" target="_blank" rel="noopener noreferrer">Heitorm2003</a></dd></div>
+        <div><dt>Inspiration</dt><dd><a href="https://websim.com/@kris_is_gaster/hitkris" target="_blank" rel="noopener noreferrer">hit kris!</a></dd></div>
+        <div><dt>Thumbnail</dt><dd>Jakeyy</dd></div>
+      </dl>
+    </section>
     <button class="shop-toggle" id="shop-toggle" type="button" aria-expanded="false" aria-controls="shop" hidden>Shop</button>
     <section class="shop" id="shop" aria-labelledby="shop-title" hidden>
       <h2 id="shop-title">Shop</h2>
       <div class="shop-item">
         <div><h3>Honed blade</h3><p>+1 hit per click</p></div>
-        <button class="buy-button" data-item="honed" type="button">Buy · 50 hits</button>
+        <button class="buy-button" data-item="honed" type="button">Buy · 50 hits / 5 DD</button>
       </div>
       <div class="shop-item">
         <div><h3>Roaring strike</h3><p>+5 hits per click</p></div>
-        <button class="buy-button" data-item="strike" type="button">Buy · 200 hits</button>
+        <button class="buy-button" data-item="strike" type="button">Buy · 200 hits / 20 DD</button>
       </div>
       <div class="shop-item kaizo-item">
         <img src="static-assets-upload14633654429706285761.webp" alt="">
         <div class="item-copy"><h3>Kaizo Knight</h3><p>Triples hits per click</p></div>
-        <button class="buy-button" data-item="kaizo" type="button">Buy · 1225 hits</button>
+        <button class="buy-button" data-item="kaizo" type="button">Buy · 5000 hits / 500 DD</button>
+      </div>
+      <div class="shop-item">
+        <div><h3>Blowtorch</h3><p>Hold on the frozen knight to speed up the thaw timer</p></div>
+        <button class="buy-button" data-item="blowtorch" type="button">Buy · 2500 hits / 250 DD</button>
       </div>
       <div class="shop-item kaizo-item kris-item" id="kris-shop-item" hidden>
         <img src="https://images.websim.com/avatar/kris_is_gaster" alt="@kris_is_gaster">
@@ -94,6 +129,24 @@
         <button class="buy-button" id="announcement-submit" type="submit">Publish announcement</button>
         <p class="announcement-status" id="announcement-status" aria-live="polite"></p>
       </form>
+      <form id="sad-sword-grant-form" hidden>
+        <label for="sad-sword-recipient">Give Sad Tumore Sword (owner only)</label>
+        <input id="sad-sword-recipient" name="username" type="text" maxlength="33" required placeholder="@username" autocomplete="off">
+        <button class="buy-button" id="sad-sword-grant-submit" type="submit">Give item</button>
+        <p class="sad-sword-grant-status" id="sad-sword-grant-status" aria-live="polite"></p>
+      </form>
+      <form class="ban-compose" id="ban-form">
+        <label for="ban-username">Ban a player</label>
+        <input id="ban-username" name="username" type="text" maxlength="33" required placeholder="@username" autocomplete="off">
+        <textarea id="ban-reason-input" name="reason" maxlength="280" rows="2" required placeholder="Reason for ban"></textarea>
+        <button class="buy-button" id="ban-submit" type="submit">Issue ban</button>
+        <p class="ban-form-status" id="ban-form-status" aria-live="polite"></p>
+      </form>
+      <section class="ban-list-section" aria-labelledby="ban-list-title">
+        <div class="ban-list-heading"><h3 id="ban-list-title">Banned players</h3><button class="ban-refresh" id="ban-list-refresh" type="button" aria-label="Refresh ban list">↻</button></div>
+        <ul class="ban-list" id="ban-list"></ul>
+        <p class="ban-list-status" id="ban-list-status" aria-live="polite">Loading…</p>
+      </section>
       <div class="admin-stats" aria-label="Local game statistics">
         <div><span>Current hits</span><strong id="admin-current-hits">0</strong></div>
         <div><span>Backgrounds</span><strong id="admin-background-count">1 / 4</strong></div>
@@ -172,6 +225,21 @@
       <label class="vessel-name-label" for="vessel-name">Name</label>
       <input class="vessel-name" id="vessel-name" maxlength="24" autocomplete="off" placeholder="Your vessel's name" required>
       <button class="vessel-create" id="vessel-create" type="button">Create vessel</button>
+    </div>
+  </section>
+  <section class="secret-room" id="secret-room" role="dialog" aria-modal="true" aria-label="Secret room" hidden>
+    <button class="secret-room-exit" id="secret-room-exit" type="button">Return</button>
+    <button class="mystery-man" id="mystery-man" type="button" aria-label="Mystery man">
+      <img id="mystery-man-sprite" src="Mysteryman_overworld.png" alt="Mystery man">
+    </button>
+  </section>
+  <section class="ban-screen" id="ban-screen" role="dialog" aria-modal="true" aria-labelledby="ban-title" tabindex="-1" hidden>
+    <img class="ban-background" src="is-it-just-me-or-does-the-vessel-creation-void-seem-very-v0-xq43dszcfpmc1.webp" alt="">
+    <div class="ban-dialogue">
+      <p class="ban-kicker">ACCESS REVOKED</p>
+      <h2 id="ban-title">You have been banned.</h2>
+      <p class="ban-reason"><strong>Reason:</strong> <span id="ban-reason"></span></p>
+      <p class="ban-followup">This decision was made by the project admins. If you believe this is a mistake, contact an admin.</p>
     </div>
   </section>
 </body>
