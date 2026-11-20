@@ -12,17 +12,30 @@ playKrisButton.addEventListener("click", event => {
 });
 
 const knight = document.querySelector("#knight");
+const streetlight = document.querySelector("#streetlight");
 const tvSet = document.querySelector("#tv-set");
 const tvImage = document.querySelector("#tv-image");
+const secretRoom = document.querySelector("#secret-room");
+const secretRoomExit = document.querySelector("#secret-room-exit");
+const mysteryMan = document.querySelector("#mystery-man");
+const mysteryManSprite = document.querySelector("#mystery-man-sprite");
 const hits = document.querySelector("#hits");
+const darkDollarsDisplay = document.querySelector("#dark-dollars");
 const freezeStatus = document.querySelector("#freeze-status");
 const shopToggle = document.querySelector("#shop-toggle");
 const shop = document.querySelector("#shop");
 const krisShopItem = document.querySelector("#kris-shop-item");
+const sadSwordButton = document.querySelector("#sad-sword-toggle");
+const sadSwordGift = document.querySelector("#sad-sword-gift");
+const sadSwordGrantForm = document.querySelector("#sad-sword-grant-form");
+const sadSwordRecipient = document.querySelector("#sad-sword-recipient");
+const sadSwordGrantStatus = document.querySelector("#sad-sword-grant-status");
 const leaderboardToggle = document.querySelector("#leaderboard-toggle");
 const leaderboardPanel = document.querySelector("#leaderboard-panel");
 const leaderboardList = document.querySelector("#leaderboard-list");
 const leaderboardStatus = document.querySelector("#leaderboard-status");
+const adminLeaderboardList = document.querySelector("#admin-leaderboard-list");
+const adminLeaderboardStatus = document.querySelector("#admin-leaderboard-status");
 const chatToggle = document.querySelector("#chat-toggle");
 const chatPanel = document.querySelector("#chat-panel");
 const chatStatus = document.querySelector("#chat-status");
@@ -35,6 +48,10 @@ const achievementsPanel = document.querySelector("#achievements-panel");
 const achievementList = document.querySelector("#achievement-list");
 const backgroundsToggle = document.querySelector("#backgrounds-toggle");
 const backgroundsPanel = document.querySelector("#backgrounds-panel");
+const socialsToggle = document.querySelector("#socials-toggle");
+const socialsPanel = document.querySelector("#socials-panel");
+const creditsToggle = document.querySelector("#credits-toggle");
+const creditsPanel = document.querySelector("#credits-panel");
 const backgroundList = document.querySelector("#background-list");
 const knightSprite = knight.querySelector("img");
 const achievementScene = document.querySelector("#achievement-scene");
@@ -94,17 +111,29 @@ const announcementForm = document.querySelector("#announcement-form");
 const announcementInput = document.querySelector("#announcement-input");
 const announcementSubmit = document.querySelector("#announcement-submit");
 const announcementStatus = document.querySelector("#announcement-status");
+const banScreen = document.querySelector("#ban-screen");
+const banReason = document.querySelector("#ban-reason");
+const banForm = document.querySelector("#ban-form");
+const banUsername = document.querySelector("#ban-username");
+const banReasonInput = document.querySelector("#ban-reason-input");
+const banFormStatus = document.querySelector("#ban-form-status");
+const banList = document.querySelector("#ban-list");
+const banListStatus = document.querySelector("#ban-list-status");
+const banListRefresh = document.querySelector("#ban-list-refresh");
 const storageKey = "roaring-knight-hits";
+const darkDollarStorageKey = "roaring-knight-dark-dollars";
 const backgroundKey = "roaring-knight-background";
 const backgroundProgressKey = "roaring-knight-background-progress";
 const unlockKey = "roaring-knight-shop-unlocked";
 const upgradesKey = "roaring-knight-upgrades";
 const kaizoEquippedKey = "roaring-knight-kaizo-equipped";
+const blowtorchEquippedKey = "roaring-knight-blowtorch-equipped";
 const krisItemEquippedKey = "roaring-knight-kris-item-equipped";
+const sadSwordEquippedKey = "roaring-knight-sad-sword-equipped";
 const victoryDismissedKey = "roaring-knight-victory-dismissed";
 const swoonAchievementKey = "roaring-knight-achievement-are-we-serious";
 const jaronaAchievementKey = "roaring-knight-achievement-jarona";
-const jaronaClicksKey = "roaring-knight-jarona-left-clicks";
+const jaronaClicksKey = "roaring-knight-streetlight-clicks";
 const roaringAchievementKey = "roaring-knight-achievement-roaring";
 const roaringClicksKey = "roaring-knight-roaring-clicks";
 const knightClicksKey = "roaring-knight-total-clicks";
@@ -112,6 +141,8 @@ const snowgraveAchievementKey = "roaring-knight-achievement-snowgrave";
 const snowgraveClicksKey = "roaring-knight-snowgrave-clicks";
 const snowgraveFreezeEndKey = "roaring-knight-snowgrave-freeze-end";
 const tvAchievementKey = "roaring-knight-achievement-tv-timeee";
+const tvClicksKey = "roaring-knight-secret-room-tv-clicks";
+const secretRoomUnlockedKey = "roaring-knight-secret-room-unlocked";
 const swoonAchievementAt = 1267;
 const shopUnlockAt = 100;
 const gameWinAt = 1225;
@@ -137,9 +168,15 @@ let jaronaAchievementEarned = localStorage.getItem(jaronaAchievementKey) === "tr
 let roaringAchievementEarned = localStorage.getItem(roaringAchievementKey) === "true";
 let snowgraveAchievementEarned = localStorage.getItem(snowgraveAchievementKey) === "true";
 let tvAchievementEarned = localStorage.getItem(tvAchievementKey) === "true";
+let tvClicks = Number.parseInt(localStorage.getItem(tvClicksKey) ?? "0", 10);
+if (!Number.isSafeInteger(tvClicks) || tvClicks < 0) tvClicks = 0;
+let secretRoomUnlocked = localStorage.getItem(secretRoomUnlockedKey) === "true" || tvClicks >= 30;
+let mysteryManClicked = false;
 let goatAchievementVisible = false;
 let krisItemEligible = false;
 let krisItemEquipped = false;
+let sadSwordGranted = false;
+let sadSwordEquipped = localStorage.getItem(sadSwordEquippedKey) === "true";
 if (tvAchievementEarned) tvImage.hidden = false;
 let snowgraveClicks = Number.parseInt(localStorage.getItem(snowgraveClicksKey) ?? "0", 10);
 if (!Number.isSafeInteger(snowgraveClicks) || snowgraveClicks < 0) snowgraveClicks = 0;
@@ -155,13 +192,18 @@ if (!Number.isFinite(jaronaLeftClicks) || jaronaLeftClicks < 0 || (jaronaAchieve
 let achievementSequenceStarted = false;
 let cutscenePlaying = false;
 const items = {
-  honed: { cost: 50, bonus: 1 },
-  strike: { cost: 200, bonus: 5 },
-  kaizo: { cost: 1225, bonus: 0 },
+  honed: { cost: 50, darkCost: 5, bonus: 1 },
+  strike: { cost: 200, darkCost: 20, bonus: 5 },
+  kaizo: { cost: 5000, darkCost: 500, bonus: 0 },
+  blowtorch: { cost: 2500, darkCost: 250, bonus: 0 },
+  sadSword: { cost: Infinity, bonus: 900 },
 };
 
 let count = Number.parseInt(localStorage.getItem(storageKey) ?? "0", 10);
 if (!Number.isFinite(count) || count < 0) count = 0;
+let darkDollars = Number.parseInt(localStorage.getItem(darkDollarStorageKey) ?? "0", 10);
+if (!Number.isSafeInteger(darkDollars) || darkDollars < 0) darkDollars = 0;
+let infiniteDarkDollars = false;
 let unlocked = localStorage.getItem(unlockKey) === "true" || count >= shopUnlockAt;
 let upgrades;
 try {
@@ -171,13 +213,20 @@ try {
 }
 if (!upgrades || typeof upgrades !== "object") upgrades = {};
 let kaizoEquipped = localStorage.getItem(kaizoEquippedKey) === "true" && Boolean(upgrades.kaizo);
+let blowtorchEquipped = localStorage.getItem(blowtorchEquippedKey) === "true" && Boolean(upgrades.blowtorch);
+let blowtorchHeld = false;
+let blowtorchLastTick = 0;
+let blowtorchTimer = null;
 krisItemEquipped = localStorage.getItem(krisItemEquippedKey) === "true" && Boolean(upgrades.kris);
 function save() {
   localStorage.setItem(storageKey, String(count));
+  localStorage.setItem(darkDollarStorageKey, String(darkDollars));
   localStorage.setItem(unlockKey, String(unlocked));
   localStorage.setItem(upgradesKey, JSON.stringify(upgrades));
   localStorage.setItem(kaizoEquippedKey, String(kaizoEquipped));
+  localStorage.setItem(blowtorchEquippedKey, String(blowtorchEquipped));
   localStorage.setItem(krisItemEquippedKey, String(krisItemEquipped));
+  localStorage.setItem(sadSwordEquippedKey, String(sadSwordEquipped));
   localStorage.setItem(swoonAchievementKey, String(swoonAchievementEarned));
   localStorage.setItem(jaronaAchievementKey, String(jaronaAchievementEarned));
   localStorage.setItem(jaronaClicksKey, String(jaronaLeftClicks));
@@ -193,17 +242,18 @@ function save() {
 let chatRoom = null;
 let chatStarted = false;
 let chatConnected = false;
-const badgeLabels = { owner: "OWNER", admin: "ADMIN", goat: "THE GOAT", guest: "GUEST", bugle: "bugle from tbb" };
+const badgeLabels = { owner: "OWNER", admin: "ADMIN", roaring: "the roaring knight if they locked in victor", goat: "THE GOAT", guest: "GUEST", bugle: "bugle from tbb", artist: "ARTIST" };
 
 function getUserTagTypes(username, serverTags) {
   const allowed = Object.keys(badgeLabels);
   const trusted = Array.isArray(serverTags) ? serverTags.filter(tag => allowed.includes(tag)) : [];
-  if (trusted.length) return [...new Set(trusted)];
   const normalized = String(username || "").toLowerCase();
-  if (normalized === "heitorm2003") return ["owner"];
-  if (normalized === "kris_is_gaster") return ["admin", "goat"];
-  if (normalized === "duuxling") return ["bugle"];
-  return [];
+  const defaults = normalized === "heitorm2003" ? ["owner"]
+    : normalized === "kris_is_gaster" ? ["admin", "goat"]
+    : normalized === "shadowx" || normalized === "krissss" ? ["admin", "roaring"]
+    : normalized === "duuxling" ? ["bugle"]
+    : normalized === "jakeyy" ? ["artist"] : [];
+  return [...new Set([...trusted, ...defaults])];
 }
 
 function appendUserTags(container, types) {
@@ -343,44 +393,56 @@ async function connectGlobalChat() {
   }
 }
 
+function renderLeaderboardRows(scores, list) {
+  list.replaceChildren();
+  scores.forEach((entry, index) => {
+    const username = String(entry.username || "player");
+    const row = document.createElement("li");
+    row.className = "leader-row";
+    const rank = document.createElement("span");
+    rank.className = "leader-rank";
+    rank.textContent = String(index + 1);
+    const profile = document.createElement("a");
+    profile.className = "leader-user";
+    profile.href = "https://websim.com/@" + encodeURIComponent(username);
+    profile.target = "_blank";
+    profile.rel = "noopener noreferrer";
+    const avatar = document.createElement("img");
+    avatar.src = "https://images.websim.com/avatar/" + encodeURIComponent(username);
+    avatar.alt = "";
+    avatar.loading = "lazy";
+    const name = document.createElement("span");
+    name.className = "leader-username";
+    name.textContent = "@" + username;
+    profile.append(avatar, name);
+    appendUserTags(profile, getUserTagTypes(username));
+    const points = document.createElement("span");
+    points.className = "leader-score";
+    points.textContent = Number(entry.points || 0).toLocaleString() + " hits";
+    row.append(rank, profile, points);
+    list.append(row);
+  });
+}
+
 async function loadLeaderboard() {
   leaderboardStatus.textContent = "Loading…";
+  adminLeaderboardStatus.textContent = "Loading…";
   try {
-    const response = await fetch("/api/leaderboard");
-    if (!response.ok) throw new Error("Leaderboard request failed");
-    const data = await response.json();
-    const scores = Array.isArray(data.scores) ? data.scores : [];
-    leaderboardList.replaceChildren();
-    scores.forEach((entry, index) => {
-      const username = String(entry.username || "player");
-      const row = document.createElement("li");
-      row.className = "leader-row";
-      const rank = document.createElement("span");
-      rank.className = "leader-rank";
-      rank.textContent = String(index + 1);
-      const profile = document.createElement("a");
-      profile.className = "leader-user";
-      profile.href = "https://websim.com/@" + encodeURIComponent(username);
-      profile.target = "_blank";
-      profile.rel = "noopener noreferrer";
-      const avatar = document.createElement("img");
-      avatar.src = "https://images.websim.com/avatar/" + encodeURIComponent(username);
-      avatar.alt = "";
-      avatar.loading = "lazy";
-      const name = document.createElement("span");
-      name.className = "leader-username";
-      name.textContent = "@" + username;
-      profile.append(avatar, name);
-      appendUserTags(profile, getUserTagTypes(username));
-      const points = document.createElement("span");
-      points.className = "leader-score";
-      points.textContent = Number(entry.points || 0).toLocaleString() + " hits";
-      row.append(rank, profile, points);
-      leaderboardList.append(row);
-    });
+    const [allResponse, adminsResponse] = await Promise.all([
+      fetch("/api/leaderboard"),
+      fetch("/api/admin-leaderboard"),
+    ]);
+    if (!allResponse.ok || !adminsResponse.ok) throw new Error("Leaderboard request failed");
+    const [allData, adminsData] = await Promise.all([allResponse.json(), adminsResponse.json()]);
+    const scores = Array.isArray(allData.scores) ? allData.scores : [];
+    const adminScores = Array.isArray(adminsData.scores) ? adminsData.scores : [];
+    renderLeaderboardRows(scores, leaderboardList);
+    renderLeaderboardRows(adminScores, adminLeaderboardList);
     leaderboardStatus.textContent = scores.length ? "" : "No scores yet.";
+    adminLeaderboardStatus.textContent = adminScores.length ? "" : "No admin scores yet.";
   } catch {
     leaderboardStatus.textContent = "Leaderboard unavailable right now.";
+    adminLeaderboardStatus.textContent = "Admin leaderboard unavailable right now.";
   }
 }
 
@@ -450,27 +512,33 @@ function renderBackgrounds() {
 
 function renderAchievement() {
   achievementList.replaceChildren();
-  addAchievementCard("Assets/Sprites/Swoon.jpg", "are we serious?", swoonAchievementEarned);
-  addAchievementCard("Assets/Sprites/Flowery.webp", "jarona", jaronaAchievementEarned);
-  addAchievementCard("Assets/Sprites/Achivements/The_Roaring.webp", "roaring", roaringAchievementEarned);
-  addAchievementCard("Assets/Backgrounds/dark-fountain.jpg", "A Little Momentum", bestHits >= 100);
-  addAchievementCard("Assets/Backgrounds/the-roaring.jpg", "THEN THE WORLD WAS COVERED IN DARKNESS", bestHits >= 100000);
-  addAchievementCard("Roaring_Knight_Idle.webp", "Stubborn Persistence", knightClicks >= 100);
-  addAchievementCard("static-assets-upload14633654429706285761.webp", "Fully Armed", Boolean(upgrades.honed && upgrades.strike && upgrades.kaizo));
-  addAchievementCard("static-assets-upload14633654429706285761.webp", "Snowgrave..?", snowgraveAchievementEarned);
-  addAchievementCard("Tenna_battle.gif", "TV TIMEEE", tvAchievementEarned);
+  addAchievementCard("Assets/Sprites/Swoon.jpg", "are we serious?", swoonAchievementEarned, "Reach 1,267 hits and awaken something unexpected.");
+  addAchievementCard("Assets/Sprites/Flowery.webp", "jarona", jaronaAchievementEarned, "Click the streetlight 10 times.");
+  addAchievementCard("Assets/Sprites/Achivements/The_Roaring.webp", "roaring", roaringAchievementEarned, "Click Kaizo Knight 20 times to begin the Roaring.");
+  addAchievementCard("Assets/Backgrounds/dark-fountain.jpg", "A Little Momentum", bestHits >= 100, "Reach 100 hits.");
+  addAchievementCard("Assets/Backgrounds/the-roaring.jpg", "THEN THE WORLD WAS COVERED IN DARKNESS", bestHits >= 100000, "Reach 100,000 hits.");
+  addAchievementCard("Roaring_Knight_Idle.webp", "Stubborn Persistence", knightClicks >= 100, "Click the Roaring Knight 100 times.");
+  addAchievementCard("static-assets-upload14633654429706285761.webp", "Fully Armed", Boolean(upgrades.honed && upgrades.strike && upgrades.kaizo), "Own Honed Blade, Roaring Strike, and Kaizo Knight.");
+  addAchievementCard("static-assets-upload14633654429706285761.webp", "Snowgrave..?", snowgraveAchievementEarned, "After unlocking Roaring, click Kaizo Knight 20 times and survive the freeze.");
+  addAchievementCard("Tenna_battle.gif", "TV TIMEEE", tvAchievementEarned, "Click the TV set.");
   if (goatAchievementVisible) addGoatAchievementCard();
 }
 
-function addAchievementCard(imageSource, achievementName, unlocked = true) {
+function addAchievementCard(imageSource, achievementName, unlocked = true, description = "") {
   const card = document.createElement("article");
   card.className = "achievement-card" + (unlocked ? "" : " is-locked");
   const icon = document.createElement("img");
   icon.src = imageSource;
   icon.alt = "";
+  const copy = document.createElement("div");
+  copy.className = "achievement-copy";
   const title = document.createElement("h3");
   title.textContent = achievementName;
-  card.append(icon, title);
+  const detail = document.createElement("p");
+  detail.className = "achievement-description";
+  detail.textContent = description;
+  copy.append(title, detail);
+  card.append(icon, copy);
   if (!unlocked) {
     const status = document.createElement("span");
     status.className = "achievement-status";
@@ -503,22 +571,54 @@ async function checkGoatAchievementAccess() {
     const username = String(user?.username || "").toLowerCase();
     goatAchievementVisible = username === "kris_is_gaster" || username === "heitorm2003";
     krisItemEligible = username === "kris_is_gaster" || username === "heitorm20003" || username === "heitorm2003";
+    infiniteDarkDollars = username === "heitorm2003";
     render();
   } catch (error) {
     console.warn("Could not verify exclusive achievement access.", error);
   }
 }
 
+function stopBlowtorch() {
+  blowtorchHeld = false;
+  if (blowtorchTimer) {
+    clearInterval(blowtorchTimer);
+    blowtorchTimer = null;
+  }
+  knight.classList.remove("is-torching");
+}
+
+function startBlowtorch() {
+  if (!blowtorchEquipped || snowgraveAchievementEarned || snowgraveFreezeEnd <= Date.now() || blowtorchHeld) return;
+  blowtorchHeld = true;
+  blowtorchLastTick = Date.now();
+  knight.classList.add("is-torching");
+  blowtorchTimer = setInterval(() => {
+    if (!blowtorchHeld || !blowtorchEquipped || snowgraveFreezeEnd <= Date.now()) {
+      stopBlowtorch();
+      refreshSnowgraveState();
+      return;
+    }
+    const now = Date.now();
+    snowgraveFreezeEnd -= (now - blowtorchLastTick) * 4;
+    blowtorchLastTick = now;
+    save();
+    refreshSnowgraveState();
+  }, 250);
+}
+
 function refreshSnowgraveState() {
   const remaining = snowgraveFreezeEnd - Date.now();
   const frozen = snowgraveFreezeEnd > 0 && remaining > 0 && !snowgraveAchievementEarned;
-  knight.disabled = frozen;
+  if (!frozen && blowtorchHeld) stopBlowtorch();
+  knight.disabled = frozen && !blowtorchEquipped;
   knight.classList.toggle("is-frozen", frozen);
+  knight.classList.toggle("is-torching", frozen && blowtorchHeld);
 
   if (frozen) {
     const minutes = Math.floor(remaining / 60000);
     const seconds = Math.floor((remaining % 60000) / 1000);
-    freezeStatus.textContent = "Frozen solid · " + minutes + ":" + String(seconds).padStart(2, "0");
+    const timerText = minutes + ":" + String(seconds).padStart(2, "0");
+    freezeStatus.textContent = blowtorchHeld ? "Blowtorch heating · " + timerText : blowtorchEquipped ? "Hold the knight to thaw · " + timerText : "Frozen solid · " + timerText;
     freezeStatus.hidden = false;
     if (!snowgraveTimer) snowgraveTimer = setInterval(refreshSnowgraveState, 1000);
     return;
@@ -640,11 +740,14 @@ function playNextPendingAchievement() {
 }
 
 function render() {
-  hits.textContent = count;
+  hits.textContent = count.toLocaleString();
+  darkDollarsDisplay.textContent = infiniteDarkDollars ? "∞" : darkDollars.toLocaleString();
   if (count >= shopUnlockAt) unlocked = true;
   shopToggle.hidden = !unlocked;
   kaizoCompanion.hidden = !kaizoEquipped;
   krisShopItem.hidden = !krisItemEligible;
+  sadSwordGift.hidden = !sadSwordGranted;
+  sadSwordButton.textContent = sadSwordEquipped ? "Unequip" : "Equip";
   if (!unlocked) {
     shop.hidden = true;
     shopToggle.setAttribute("aria-expanded", "false");
@@ -659,9 +762,12 @@ function render() {
     } else if (id === "kaizo" && owned) {
       button.disabled = false;
       button.textContent = kaizoEquipped ? "Unequip" : "Equip";
+    } else if (id === "blowtorch" && owned) {
+      button.disabled = false;
+      button.textContent = blowtorchEquipped ? "Unequip" : "Equip";
     } else {
-      button.disabled = owned || count < item.cost;
-      button.textContent = owned ? "Owned" : "Buy · " + item.cost + " hits";
+      button.disabled = owned || (count < item.cost && !infiniteDarkDollars && darkDollars < item.darkCost);
+      button.textContent = owned ? "Owned" : "Buy · " + item.cost + " hits / " + item.darkCost + " DD";
     }
   });
   save();
@@ -669,8 +775,8 @@ function render() {
   adminCurrentHits.textContent = count.toLocaleString();
   const unlockedBackgroundCount = backgrounds.filter(background => bestHits >= background.at).length;
   adminBackgroundCount.textContent = unlockedBackgroundCount + " / " + backgrounds.length;
-  const ownedUpgrades = ["honed", "strike", "kaizo"].filter(id => upgrades[id]).length;
-  adminUpgradeCount.textContent = ownedUpgrades + " / 3";
+  const ownedUpgrades = ["honed", "strike", "kaizo", "blowtorch"].filter(id => upgrades[id]).length;
+  adminUpgradeCount.textContent = ownedUpgrades + " / 4";
   refreshSnowgraveState();
   renderAchievement();
   if (count >= gameWinAt && !victoryShown && !victoryDismissed) {
@@ -682,13 +788,15 @@ function render() {
 }
 
 render();
+checkBanStatus();
+loadSadSwordStatus();
 checkGoatAchievementAccess();
 loadLeaderboard();
 loadAnnouncements();
-setInterval(loadAnnouncements, 60000);
+setInterval(loadAnnouncements, 300000);
 
-document.addEventListener("click", event => {
-  if (event.detail === 0 || event.clientX >= window.innerWidth / 2 || cutscenePlaying) return;
+streetlight.addEventListener("click", () => {
+  if (cutscenePlaying) return;
   jaronaLeftClicks += 1;
   if (jaronaAchievementEarned && jaronaLeftClicks >= 10) {
     jaronaLeftClicks = 0;
@@ -795,11 +903,46 @@ introNext.addEventListener("click", () => {
   introNext.textContent = introLineIndex === introLines.length - 1 ? "Start" : "Next";
 });
 
+async function loadSadSwordStatus() {
+  try {
+    const response = await fetch("/api/sad-sword-status");
+    if (!response.ok) return;
+    const data = await response.json();
+    sadSwordGranted = Boolean(data.granted);
+    if (sadSwordGranted) upgrades.sadSword = true;
+    else {
+      delete upgrades.sadSword;
+      sadSwordEquipped = false;
+    }
+    sadSwordGrantForm.hidden = !data.canGrant;
+    render();
+  } catch (error) {
+    console.warn("Could not load Sad Tumore Sword status.", error);
+  }
+}
+
+async function checkBanStatus() {
+  try {
+    const response = await fetch("/api/ban-status");
+    if (!response.ok) return;
+    const data = await response.json();
+    if (!data.banned) return;
+    banReason.textContent = String(data.reason || "No reason was provided.").slice(0, 280);
+    banScreen.hidden = false;
+    document.querySelector("main").inert = true;
+    for (const screen of [achievementScene, victoryScreen, introScreen, vesselScreen]) screen.inert = true;
+    document.body.style.overflow = "hidden";
+    banScreen.focus();
+  } catch (error) {
+    console.warn("Could not check ban status.", error);
+  }
+}
+
 async function revealAdminForAuthorizedUser() {
   try {
     const user = await window.websim?.getUser();
     const username = user?.username?.toLowerCase();
-    if (username === "heitorm2003" || username === "kris_is_gaster") {
+    if (["heitorm2003", "kris_is_gaster", "shadowx", "krissss"].includes(username)) {
       adminToggle.hidden = false;
     }
   } catch (error) {
@@ -809,22 +952,72 @@ async function revealAdminForAuthorizedUser() {
 
 revealAdminForAuthorizedUser();
 
-tvSet.addEventListener("click", () => {
-  if (tvAchievementEarned) return;
-  tvAchievementEarned = true;
-  tvImage.hidden = false;
-  tvSet.setAttribute("aria-label", "TV TIMEEE achievement unlocked");
-  save();
-  renderAchievement();
+function enterSecretRoom() {
+  secretRoom.hidden = false;
+  document.querySelector("main").inert = true;
+  secretRoomExit.focus();
+}
+
+function leaveSecretRoom() {
+  secretRoom.hidden = true;
+  document.querySelector("main").inert = false;
+  tvSet.focus();
+}
+
+secretRoomExit.addEventListener("click", leaveSecretRoom);
+window.addEventListener("keydown", event => {
+  if (event.key === "Escape" && !secretRoom.hidden) leaveSecretRoom();
 });
+
+mysteryMan.addEventListener("click", () => {
+  if (mysteryManClicked) return;
+  mysteryManClicked = true;
+  mysteryManSprite.src = "Mysteryman_overworld_2.png";
+  mysteryMan.classList.add("is-fading");
+  mysteryMan.addEventListener("animationend", () => {
+    mysteryMan.classList.add("is-gone");
+    mysteryMan.setAttribute("aria-label", "Mystery man disappeared");
+  }, { once: true });
+});
+
+tvSet.addEventListener("click", () => {
+  tvClicks += 1;
+  localStorage.setItem(tvClicksKey, String(tvClicks));
+  if (!tvAchievementEarned) {
+    tvAchievementEarned = true;
+    tvImage.hidden = false;
+    tvSet.setAttribute("aria-label", "TV TIMEEE achievement unlocked; " + tvClicks + " of 30 clicks");
+    save();
+    renderAchievement();
+  } else {
+    tvSet.setAttribute("aria-label", "TV click " + tvClicks + " of 30");
+  }
+  if (!secretRoomUnlocked && tvClicks >= 30) {
+    secretRoomUnlocked = true;
+    localStorage.setItem(secretRoomUnlockedKey, "true");
+    enterSecretRoom();
+  } else if (secretRoomUnlocked) {
+    enterSecretRoom();
+  }
+});
+
+knight.addEventListener("pointerdown", event => {
+  if (blowtorchEquipped && snowgraveFreezeEnd > Date.now() && !snowgraveAchievementEarned) {
+    event.preventDefault();
+    startBlowtorch();
+  }
+});
+window.addEventListener("pointerup", stopBlowtorch);
+window.addEventListener("pointercancel", stopBlowtorch);
 
 knight.addEventListener("click", () => {
   if (knight.disabled || (snowgraveFreezeEnd > Date.now() && !snowgraveAchievementEarned)) return;
   knightClicks += 1;
+  if (!infiniteDarkDollars) darkDollars += 1;
   const bonus = Object.entries(upgrades).reduce((sum, entry) => {
     const id = entry[0];
     const owned = entry[1];
-    return sum + (owned && items[id] ? items[id].bonus : 0);
+    return sum + (owned && items[id] && (id !== "sadSword" || (sadSwordGranted && sadSwordEquipped)) ? items[id].bonus : 0);
   }, 0);
   count += (1 + bonus) * (kaizoEquipped ? 3 : 1) + (krisItemEligible && krisItemEquipped ? 75000000 : 0);
   render();
@@ -866,9 +1059,116 @@ backgroundsToggle.addEventListener("click", () => {
   backgroundsToggle.setAttribute("aria-expanded", String(!backgroundsPanel.hidden));
 });
 
+socialsToggle.addEventListener("click", () => {
+  socialsPanel.hidden = !socialsPanel.hidden;
+  socialsToggle.setAttribute("aria-expanded", String(!socialsPanel.hidden));
+});
+
+creditsToggle.addEventListener("click", () => {
+  creditsPanel.hidden = !creditsPanel.hidden;
+  creditsToggle.setAttribute("aria-expanded", String(!creditsPanel.hidden));
+});
+
 adminToggle.addEventListener("click", () => {
   adminPanel.hidden = !adminPanel.hidden;
   adminToggle.setAttribute("aria-expanded", String(!adminPanel.hidden));
+  if (!adminPanel.hidden) loadBanList();
+});
+
+sadSwordGrantForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const username = sadSwordRecipient.value.trim();
+  if (!username) return;
+  sadSwordGrantStatus.textContent = "Giving item…";
+  try {
+    const response = await fetch("/api/sad-sword-grant", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ username }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not grant the item.");
+    sadSwordRecipient.value = "";
+    sadSwordGrantStatus.textContent = "Sad Tumore Sword given to @" + data.username + ".";
+    await loadSadSwordStatus();
+  } catch (error) {
+    sadSwordGrantStatus.textContent = error?.message || "Could not grant the item.";
+  }
+});
+
+async function loadBanList() {
+  banListStatus.textContent = "Loading…";
+  try {
+    const response = await fetch("/api/bans");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not load the ban list.");
+    banList.replaceChildren();
+    for (const ban of data.bans || []) {
+      const item = document.createElement("li");
+      item.className = "ban-list-item";
+      const details = document.createElement("div");
+      details.className = "ban-list-details";
+      const name = document.createElement("strong");
+      name.textContent = "@" + ban.target_username;
+      const reason = document.createElement("span");
+      reason.textContent = String(ban.reason || "No reason provided.");
+      details.append(name, reason);
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "ban-remove";
+      remove.textContent = "Unban";
+      remove.setAttribute("aria-label", "Unban @" + ban.target_username);
+      remove.addEventListener("click", () => removeBan(ban.target_username, remove));
+      item.append(details, remove);
+      banList.append(item);
+    }
+    banListStatus.textContent = data.bans?.length ? "" : "No players are banned.";
+  } catch (error) {
+    banList.replaceChildren();
+    banListStatus.textContent = error?.message || "Could not load the ban list.";
+  }
+}
+
+async function removeBan(username, button) {
+  button.disabled = true;
+  try {
+    const response = await fetch("/api/bans", {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ username }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not remove ban.");
+    await loadBanList();
+    banFormStatus.textContent = "@" + data.username + " has been unbanned.";
+  } catch (error) {
+    button.disabled = false;
+    banListStatus.textContent = error?.message || "Could not remove ban.";
+  }
+}
+
+banListRefresh.addEventListener("click", loadBanList);
+
+banForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const username = banUsername.value.trim();
+  const reason = banReasonInput.value.trim();
+  if (!username || !reason) return;
+  banFormStatus.textContent = "Issuing ban…";
+  try {
+    const response = await fetch("/api/bans", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ username, reason }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not issue ban.");
+    banForm.reset();
+    banFormStatus.textContent = "@" + data.username + " has been banned.";
+    await Promise.all([loadBanList(), checkBanStatus()]);
+  } catch (error) {
+    banFormStatus.textContent = error?.message || "Could not issue ban.";
+  }
 });
 
 announcementForm.addEventListener("submit", async event => {
@@ -916,8 +1216,9 @@ setHitsForm.addEventListener("submit", event => {
 });
 
 unlockUpgradesButton.addEventListener("click", () => {
-  upgrades = { honed: true, strike: true, kaizo: true };
+  upgrades = { honed: true, strike: true, kaizo: true, blowtorch: true };
   kaizoEquipped = true;
+  blowtorchEquipped = false;
   unlocked = true;
   adminStatus.textContent = "All upgrades unlocked. Kaizo Knight equipped.";
   render();
@@ -927,6 +1228,13 @@ unlockBackgroundsButton.addEventListener("click", () => {
   bestHits = Math.max(bestHits, 1225);
   localStorage.setItem(backgroundProgressKey, String(bestHits));
   adminStatus.textContent = "All backgrounds unlocked.";
+  render();
+});
+
+sadSwordButton.addEventListener("click", () => {
+  if (!sadSwordGranted) return;
+  sadSwordEquipped = !sadSwordEquipped;
+  upgrades.sadSword = true;
   render();
 });
 
@@ -949,8 +1257,20 @@ document.querySelectorAll(".buy-button[data-item]").forEach(button => {
       render();
       return;
     }
-    if (upgrades[id] || count < item.cost) return;
-    count -= item.cost;
+    if (id === "blowtorch" && upgrades.blowtorch) {
+      blowtorchEquipped = !blowtorchEquipped;
+      if (!blowtorchEquipped) stopBlowtorch();
+      render();
+      return;
+    }
+    if (upgrades[id]) return;
+    if (count >= item.cost) {
+      count -= item.cost;
+    } else if (infiniteDarkDollars || darkDollars >= item.darkCost) {
+      if (!infiniteDarkDollars) darkDollars -= item.darkCost;
+    } else {
+      return;
+    }
     upgrades[id] = true;
     render();
   });
